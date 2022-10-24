@@ -1,0 +1,118 @@
+* {
+    box-sizing: border-box; 
+    margin:0;
+    padding: 0;
+}
+
+
+body{
+    display:flex; /*main태그 위치를 이동하기위해... 모든 body요소들이 자유롭게 움직일 수 있게 설정*/
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /*그니까 100퍼로 해서 그 가운데에다가 놓는건가바...*/
+    /* vh : viewport height
+            현재 기기(브라우저)의 높이
+            %단위로 지정
+    */
+}
+
+
+
+main .logo-area{
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.logo-area img{
+    width:150px;
+}
+
+.input-box{
+    width:300px;
+    margin:20px 0 40px;
+}
+
+.input-box input{
+    border:none;
+    border-bottom: 2px solid black;
+    width: 100%;
+    padding : 15px 0;
+    font-size : 18px;
+}
+
+.input-box input:focus{
+    outline : none;
+    border-bottom-color:  blue;
+}
+
+.login-btn{
+    cursor: pointer;
+    display:block;
+    width:100%;
+    background-color: #455ba8;
+    border:0;
+    color:white;
+    font-size:18px;
+    padding:15px;
+    border-radius: 5px;
+
+}
+
+.login-btn:active{
+    transform:scale(0.95);
+}
+
+#saveId{
+    display: none;
+}
+
+#saveId + label{
+    display:flex;
+    cursor: pointer;
+}
+
+#saveId + label > i{
+    display:flex;
+    justify-content : center;
+    align-items: center;
+
+    width:25px;
+    height:25px;
+    border:lpx solid #ccc;
+
+    border-radius: 50%;
+    color :#ccc;
+
+    margin-right : 10px; /*'아이디 저장' 옆으로 밀기*/
+    
+}
+
+/* 아이디저장 클릭했을 때의 효과 */
+/* 체크되었을 때, 다음 아이디의 후손 아이템... 즉 아이콘...을 지정하는거*/
+#saveId:checked + label > i{
+    background-color: #455ba8;
+    border-color:#455ba8;
+    color:white;
+}
+
+.saveId-area {
+    margin-top : 10px;
+    padding : 10px 0;
+    border-bottom: 2px solid #ccc;
+    display: flex;
+    align-items : center;
+}
+
+.text-area{
+    margin-top: 10px;
+    text-align: center;
+
+}
+
+.text-area a{
+    text-decoration: none;
+    color:black;
+    margin: 0 20px;
+}
+
+
