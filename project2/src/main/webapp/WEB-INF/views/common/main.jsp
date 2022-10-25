@@ -69,11 +69,11 @@
                         <form action="/member/login" name = "login-frm" method = "POST">
                             <fieldset id ="id-pw-area"> <!-- 아이디,비밀번호,로그인 버튼 있는 곳 -->
                                 <section>
-                                    <input type = "text" name = "inputEmail" placeholder="이메일" 
+                                    <input type = "text" name = "memberEmail" placeholder="이메일" 
                                     autocomplete="off" value = "${cookie.saveId.value}"> 
                                                     <%-- 쿠키 중. saveId에 .저장된 값을 의미한다.... --%>
                                     <!-- autocomplete="off" : 자동완성 안 하겠당 -->
-                                    <input type = "password" name = "inputPw" placeholder="비밀번호">
+                                    <input type = "password" name = "memberPw" placeholder="비밀번호">
                                 </section>
                 
                                 <section>

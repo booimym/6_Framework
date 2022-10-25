@@ -6,8 +6,14 @@
 	<!-- The definition of the Root Spring Container shared by all Servlets and Filters -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
+		
+		<!-- 서버가 start되자마자 적용할 설정 파일을 작성하는 곳  -->
 		<!-- sparing 폴더 이동한 후에 경로도 같이 변경했다. -->
-		<param-value>classpath:spring/root-context.xml</param-value>
+		<!--  -->
+		<param-value> 
+			classpath:spring/root-context.xml  <!-- 원래 있는거 -->
+			classpath:spring/spring-security.xml <!-- 우리가 만든 거 -->
+		</param-value>
 	</context-param>
 	
 	<!-- Creates the Spring Container shared by all Servlets and Filters -->
