@@ -19,6 +19,16 @@ public class MemberDAO {
 			return sqlSession.selectOne("memberMapper.login",memberEmail);
 			
 		}
+
+		/** 회원가입 dao
+		 * @param inputMember
+		 * @return result
+		 */
+		public int signUp(Member inputMember) {
+			
+//			return sqlSession.insert("memberMapper.signUp", inputMember);
+			return 0;
+		}
 		
 		
 		

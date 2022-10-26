@@ -1,14 +1,24 @@
 package edu.kh.project.member.controller;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.kh.project.member.model.service.MemberService;
 import edu.kh.project.member.model.service.MemberServiceImpl;
@@ -26,6 +36,7 @@ import edu.kh.project.member.model.vo.Member;
 // controller 어노테이션 : 컴파일러에게 현재 클래스가 Controller임을 알려줌
 //	+ bean으로 등록한다(Spring이 객체로 만들어서 관리)
 @Controller 
+@SessionAttributes({"loginMember","message","test2"}) // -> Model에 추가된 속성 중 Key가 일치하는 속성을 session scope로 추가!
 public class MemberController {
 	
 	// * 공용으로 사용할 Service 객체 생성 *
@@ -155,8 +166,37 @@ public class MemberController {
 	
 	
 	
+	// *참고*
+	
+	// Controller 메서드 매개변수에 객체를 작성하면
+	// 자동으로 생성되거나 얻어올 수 있는 이유
+	// -> Spring Container에서 Argument Resolver(매개변수 해결사) 제공
+	//    유연하게 처리함
+	// 
+	
 	@PostMapping("/member/login")
-	public String login(/* @ModelAttribute */ Member inputMember){
+	public String login(/* @ModelAttribute */ Member inputMember,
+			/*HttpSession session*/ Model model, //이렇게 하면 session객체가 얻어와지긴 한다. 근데 안씀... 대신 Model을 씀
+			RedirectAttributes ra,
+			@RequestParam(value ="saveId", required = false) String saveId, //체크박스 값 얻어오기
+			HttpServletResponse resp, //쿠키 전달용
+			 @RequestHeader(value = "referer") String referer // 요청 이전 주소
+			
+			){ 
+		
+		
+		// Model : 데이터 전달용 객체
+		// - 데이터를 Map 형식으로 저장하여 전달하는 객체로서
+		// - 기본값 : request scope (다른 걸로도 변형이 가능하다는 뜻임ㅋ)
+		// + @SessionAttribtes 어노테이션과 함께 작성 시
+		// session scope로 변환이 가능하다.
+		
+		// RedirectAttributes
+		// - 리다이렉트 시 값을 전달하는 용도의 객체로서
+		// - 응답 전 : request scope
+		// - redirect 중에는 session scope로 피신함....
+		// - 응답 후에는 request scope로 다시 옴....
+		// 
 		
 		//System.out.println(inputMember);
 		
@@ -169,18 +209,220 @@ public class MemberController {
 		//서비스 호출 후 결과를 반환받기!
 		Member loginMember = service.login(inputMember);
 		
+		String path = null; // 리다이렉트 경로를 저장한 변수!!!!
 		
-		// 로그인 성공 시 loginMember를 세션에 추가
-		// 로그인 실패 시 "아이디 또는 비밀번호가 일치하지 않습니다"를 세션에 추가!
-		return "redirect:/"; //이러면 view resolver 안거치고 다시 handMapping을 통해서 controller로 돌아옴
+		
+		
+		if(loginMember != null) {
+			path = "/"; //메인페이지로 이동
+			// 로그인 성공 시 loginMember를 세션에 추가
+			
+			//addAttribute("key", value) = req.setAtrribute("K",V)
+			model.addAttribute("loginMember", loginMember );
+			//request scope 상태임
+			
+			//@SessionAttributes("loginMember")를 클래스 위에 추가하면 
+			// session scope로 변한다.
+			// -> Model에 추가된 속성 중 Key가 일치하는 속성을 session scope로 추가한다는 뜻!
+			
+			
+			//***********************************************************************************
+			//(1) 쿠키 생성
+			
+			Cookie cookie = new Cookie("saveId",loginMember.getMemberEmail());
+			
+			//(2) 쿠기 유지 시간을 지정한다...
+			if(saveId != null) { //체크 되었을 때
+				
+				//1년 동안 쿠키를 유지한다고 하자!
+				cookie.setMaxAge(60*60*24*365);
+				
+			} else { //체크 안 되었을 때
+				
+				
+				
+				
+				//0초동안 쿠키를 유지하겠다.... 즉, 생성과 동시에 삭제하겠다...!
+				// ==> 클라이언트의 쿠키파일을 삭제
+				cookie.setMaxAge(0);
+			}
+			
+			//(3) 쿠키가 사용되는 경로 지정
+			cookie.setPath("/"); //localhost 밑에 모든 경로에서 사용
+			
+			//(4) 생성된 쿠키를 응답 객체에 담아서 클라이언트에게 전달
+			resp.addCookie(cookie);
+			
+			
+			//***********************************************************************************
+			
+			
+		}else {
+			
+			
+			//*path***********************************************************************
+			
+			path = referer;  //로그인 요청 전 페이지 주소(==referer라고 부름)
+			// 기존 : HttpServletRequest req; 객체를 들고와야됨....
+			//        req.getHeader("referer");라고 적었었음
+			// new : @RequestHeader(value = "referer") String referer라고 적는당!!!!!
+			//		 path = referer; 
+			
+			
+			
+			
+			
+			
+			// 로그인 실패 시 "아이디 또는 비밀번호가 일치하지 않습니다"를 세션에 추가!
+			//model.addAttribute("message","아이디 또는 비밀번호가 일치하지 않습니다.");
+				// -> 메인 페이지 주소에 message 값이 노출이 되는데
+				// -> 이걸 RedirectAttributes로 변환할거임
+			ra.addFlashAttribute("message","아이디 또는 비밀번호가 일치하지 않습니다.");
+			// ra.addFlashAttribute == 잠깐 sessionscope에 추가하겠다!!!!는 의미임
+			
+		}
+		
+		
+		return "redirect:" + path; //이러면 view resolver 안거치고 다시 handMapping을 통해서 controller로 돌아옴
+	}
+	
+	
+	//로그인 페이지로 이동
+	@GetMapping("/member/login")
+	public String loginPage() {
+		
+		return "member/login";
+	
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	
+	
+	//로그아웃
+	@GetMapping("/member/logout")
+	public String logout(SessionStatus status) {
+		
+		// 기존 방식 :  안됨!
+		// HttpServletRequest req;
+		// HttpSession session = req.getSession();
+		// session.invalidate(); 세션 무효화하는 코드...
+		
+		// 왜? <<@SessionAttributes로 session scope에 등록된 값>>을 무효화 시키려면
+		// <<SessionStatus>> 라는 별도의 객체를 이용해야 한다..........
+		
+		status.setComplete(); //세션 무효화시키는 칭구....
+		
+		return "redirect:/";
+	}
+	
+	//회원가입 페이지로 이동
+	@GetMapping("/member/signUp")
+	public String signUpPage() {
+		
+		return "member/signUp";
+	
+	}
+	
+	//회원가입
+	@PostMapping("/member/signUp")
+	public String signUp(/* @ModelAttribute 어노테이션 (생략) */Member inputMember/*커맨드 객체*/,
+				String[] memberAddress, /*name 속성값이 memberAddress인 값을 배열로 반환 */
+				RedirectAttributes ra,
+				@RequestHeader(value = "referer") String referer
+			) {
+		
+		
+		  // 요청 이전 주소
+		// 한글이 깨지는 이유
+		// -> post요청 시 인코딩 처리 필요-> 인코딩 필터로 처리함!!(web.xml 에서..)
+		
+		//Spring은
+		// 1) 같은 name 속성을 가진 input 태그의 값을
+		// 	 값,값,값,값,값... 자동으로 하나의 문자열로 만들어준다....
+		
+		// 2) input type = "text"의 값이 작성되지 않은 경우
+		//	  null이 아닌 빈칸("")으로 값을 얻어온다.
+		
+		// 주소가 작성되지 않은 경우 ==> null
+		if(inputMember.getMemberAddress().equals(",,")) {
+
+			inputMember.setMemberAddress(null);
+			
+		
+		// 주소가 작성된 경우 ==> 주소,,주소,,주소
+		} else {
+		
+			inputMember.setMemberAddress(String.join(",,", memberAddress));
+			
+			// 서비스 호출 후 결과 반환 받기
+			
+			int result = service.signUp(inputMember);
+			
+			String path = null; //리다이렉트 경로 지정
+			String message = null; //전달할 메시지 저장 변수
+			
+			if(result>0) { //성공 시
+				path="/";
+				message="회원가입 성공!!!!!!!!";
+				
+			} else { //실패시
+				path=referer;
+				message = "회원가입실패........";
+				
+				
+				// 이전 페이지로 돌아갔을 때 입력했던 값을 같이 전달할 것임..!
+				inputMember.setMemberPw(null); //비밀번호 삭제
+				ra.addFlashAttribute("tempMember",inputMember);
+			}
+		
+			ra.addFlashAttribute("message", message);
+			
+			return "redirect:" + path;
+ 			
+		}
+		
+		
+		return null;
 	}
 	
 	
 	
+/* 스프링 예외 처리 방법 (3종류, 중복 사용 가능)
+ * 
+ * 1순위 : try-catch / throws 예외 처리 구문
+ * 		   -> 메서드 단위로 처리를 한다.			
+ * 
+ * 2순위 : @ExceptionHandler 어노테이션
+ * 		   -> 클래스 단위로 처리를 한다.
+ * 		   - 하나의 컨트롤러에서 발생하는 예외를
+ * 			하나의 메서드에 모아서 처리한다.
+ * 
+ * 3순위 : @ControllerAdvice 어노테이션
+ * 		   -> 전역 (웹 애플리케이션)에서 발생하는 예외를 모아서 처리를 한다.
+ * 		   - 별도 클래스로 작성
+ * 
+ * 
+ * */
 	
+	// MemberController에서 발생하는 예외를 모아서 처리한다
+	//@ExceptionHandler(Exception.class)
+	public String exceptionHandler(Exception e, Model model) {
+		
+		// 매개변수 Exception e : 발생한 예외를 전달 받는 매개변수
+		
+		e.printStackTrace();
+		
+		model.addAttribute("errorMessage","회원 관련 서비스 이용 중 문제가 발생했습니다.");
+		model.addAttribute("e",e);
+		
+		return "common/error";
+		
+		
+		
+	}
 	
-	
-	
+
 	
 	
 	

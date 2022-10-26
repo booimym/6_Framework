@@ -25,7 +25,8 @@
         <form action="/member/login" method = "post">
             <section class = "input-box">
                 <!-- required속성:form태그 제출 시 해당 input태그에 값이 존재하는 검사-->
-                <input type="text" name ="inputEmail" placeholder="Email" required value = "${cookie.saveId.value}">
+                <input type="text" name ="memberEmail" placeholder="Email" required value = "${cookie.saveId.value}">
+                
                 
             </section>
 
@@ -33,7 +34,7 @@
 
             <section class = "input-box">
                 <!-- required속성:form태그 제출 시 해당 input태그에 값이 존재하는 검사-->
-                <input type="password" name ="inputPw" placeholder="password" required >
+                <input type="password" name ="memberPw" placeholder="password" required >
                 
             </section>
             <button class = "login-btn">login</button>
@@ -61,13 +62,13 @@
         </form>
     </main>  
 
-    <c:if test = "${!empty sessionScope.message}"> <%--메시지가 비어있지 않다면,--%>
+    <c:if test = "${!empty message}"> <%--메시지가 비어있지 않다면,--%>
         <script>
-            alert("${sessionScope.message}");
+            alert("${message}");
         </script>
 
         <%-- message 1회 출력 후 session scope에서 삭제하기!!(삭제 안하면, 한번 로그인 실패하면 계속 로그인 실패한 게 됨....남아있으니까) --%>
-        <c:remove var = "message" scope = "session" />
+        <c:remove var = "message"  />
     </c:if>
 
 

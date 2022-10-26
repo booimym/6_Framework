@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="memberMapper">
-
 	<!-- namespace 속성 : 현재 공간(영역)에 대한 이름(반드시 지정!)  -->
+
 
    <!--<cache-ref namespace=""/>는 무조건 삭제하기!-->
    
@@ -11,7 +11,7 @@
    
    	- 마이바티스에서 select를 진행하는 경우
    	  기본적으로 java 객체 필드명과 ResultSet 컬럼명이 같은 경우
-   	  자동으로 객체에 세팅이 되는데
+   	  자동으로 객체에 세팅이 되는데 (보통 표기법이 다름.ㅋㅋㅋ)
    	  
    	  다를 경우, 
    	  컬럼 값을 어떤 필드에 세팅할지를 지정하는 태그임.....!!!!
@@ -82,8 +82,31 @@
 	TO_CHAR(ENROLL_DATE,'YYYY"년 "MM"월 "DD"일" HH24"시" MI"분" SS"초"') AS ENROLL_DATE  
 	FROM MEMBER
 	WHERE MEMBER_DEL_FL = 'N'
-	AND MEMBER_EMAIL = #{memberEmail}
+	AND MEMBER_EMAIL = #{memberEmail} ;
    </select>
+   
+   
+   <!-- insert / update / delete는 
+   	  항상 반영된 행의 개수(int type)이 반환되기 때문에
+   	  별도의 resultType 지정이 필요 없다!
+    -->
+   
+   
+   
+   <!-- 회원 가입 -->
+   											<!-- 별칭 : Member(mybatis-config.xml) -->
+   <insert id ="signUp" parameterType="edu.kh.project.member.model.vo.Member">
+   	INSERT INTO "MEMBER"
+   	VALUES(SEQ_MEMBER_NO.NEXTVAL, 
+   		#{memberEmail},
+   		#{memberPw},
+   		#{memberNickname},
+   		#{memberTel},
+   		#{memberAddress},
+   		DEFAULT, DEFAULT, DEFAULT, DEFAULT) 
+   </insert>
+   
+   
   
   
 </mapper>

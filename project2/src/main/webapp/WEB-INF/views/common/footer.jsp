@@ -20,13 +20,13 @@
         alert창을 이용해서 내용을 출력 --%>
 
     <%-- 메세지가 비어 있는 경우 = 로그인 성공한 경우임. --%>
-    <c:if test = "${!empty sessionScope.message}"> <%--메시지가 비어있지 않다면,--%>
+    <c:if test = "${!empty message}"> <%--메시지가 비어있지 않다면,--%>
         <script>
-            alert("${sessionScope.message}");
+            alert("${message}");
         </script>
 
-        <%-- message 1회 출력 후 session scope에서 삭제하기!!(삭제 안하면, 한번 로그인 실패하면 계속 로그인 실패한 게 됨....남아있으니까) --%>
-        <c:remove var = "message" scope = "session" />
+        <%-- message 1회 출력 후 [모든] scope에 있는 key:message인 애들 삭제하기!!(삭제 안하면, 한번 로그인 실패하면 계속 로그인 실패한 게 됨....남아있으니까) --%>
+        <c:remove var = "message"  />
     </c:if>
 
     <%-- footer에다가 이걸 집어넣는 이유! --%>
