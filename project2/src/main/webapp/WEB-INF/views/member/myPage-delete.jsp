@@ -26,11 +26,11 @@
                 <h1 class = "myPage-title">회원 탈퇴</h1>
                 <span class = "myPage-subject">현재 비밀번호가 일치하는 경우 탈퇴할 수 있습니다.</span>
                 
-                <form action = "delete" method = "POST" name = "myPage-frm">
+                <form action = "delete" method = "POST" name = "myPage-frm" id = "memberDeleteForm">
 
                     <div class = "myPage-row">
                         <label >현재 비밀번호</label>
-                        <input type="password" name = "memberPw"  maxlength="20">
+                        <input type="password" name = "memberPw" id ="memberPw" maxlength="20">
                     </div>
 
                     <div class = "myPage-row info-title">
@@ -86,5 +86,6 @@
     <%-- footer.jsp.include --%>
     <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
     <!-- 다음 주소 api 추가 -->
+     <script src="/resources/js/member/myPage.js"></script>
 </body>
 </html>
