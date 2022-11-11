@@ -96,6 +96,12 @@ memberEmail.addEventListener("input",function(){
 
     if(regEx.test(memberEmail.value)){ //유효한 경우
 
+
+      
+
+
+
+
             // emailMessage.innerText = "유효한 이메일 형식입니다.";
             // emailMessage.classList.remove("error");
             // emailMessage.classList.add("confirm");
@@ -293,11 +299,40 @@ memberNickname.addEventListener("input",function(){
     if(regEx.test(memberNickname.value)){ //유효한 경우
 
         // ** 닉네임 중복검사 코드를 추가할 예정 **
+        const param = {"memberNickname" : memberNickname.value};
 
-        nickMessage.innerText = "유효한 닉네임 형식입니다.";
-        nickMessage.classList.add("confirm");
-        nickMessage.classList.remove("error");
-        checkObj.memberNickname = true;
+
+        $.ajax({
+
+            url : '/nicknameDupCheck',
+            data : param, 
+            //type : "GET", //type 미작성 시 기본값 get이니까 굳이 안적어도 됨
+            success : (res) => {
+                //매개변수 res == 서버 비동기 통신 응답 데이터
+                console.log("res : " + res);
+
+                if(res == 0){
+                    nickMessage.innerText = "사용가능한 닉네임 형식입니다.";
+                    nickMessage.classList.add("confirm");
+                    nickMessage.classList.remove("error");
+                    checkObj.memberNickname = true;
+                }else{
+                    nickMessage.innerText = "이미 사용중인 닉네임 형식입니다.";
+                    nickMessage.classList.add("error");
+                    nickMessage.classList.remove("confirm");
+                    checkObj.memberNickname = false;
+                }
+            },
+            error : () => {
+                console.log("닉네임 중복 검사 실패");
+            },
+            complete : tempFn //이렇게 쓰면 밑에 쓴 function tempFn(){} 이거가 나온다...
+        });
+
+        // nickMessage.innerText = "유효한 닉네임 형식입니다.";
+        // nickMessage.classList.add("confirm");
+        // nickMessage.classList.remove("error");
+        // checkObj.memberNickname = true;
 
 
 
@@ -312,6 +347,10 @@ memberNickname.addEventListener("input",function(){
 
 
 })
+
+function tempFn(){
+    console.log("닉네임 검사 완료");
+}
 
 const memberTel = document.getElementById("memberTel");
 const telMessage = document.getElementById("telMessage");
