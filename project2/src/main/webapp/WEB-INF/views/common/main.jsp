@@ -168,8 +168,17 @@
                         <article class = "login-area">
                         
                             <%-- 회원 프로필 이미지 --%>
-                            <a href="#">
-                                <img id = "member-profile" src = "/resources/images/banana.png">
+                            <a href="/member/myPage/profile"><%-- 클릭하면 페이지 수정하는 곳으로 갈 수 있게... --%>
+                                <c:if test = "${empty loginMember.profileImage}"> <%-- 비어있다면, 기본이미지 보여주겠다. --%>
+
+                                <img id = "member-profile" src="/resources/images/banana.png" alt="">
+
+                                </c:if>
+                                <c:if test = "${not empty loginMember.profileImage}"> <%-- 안 비어있다면, . --%>
+
+                                    <img id = "member-profile" src="${loginMember.profileImage}" alt="">
+
+                                </c:if>
                             </a>
                             <%-- 회원 정보 + 로그아웃 버튼 --%>
                             <div class = "my-info">

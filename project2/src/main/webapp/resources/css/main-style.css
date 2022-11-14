@@ -111,6 +111,7 @@ nav{
     top : 0;
 
     background-color: white; /*투명하지 않게...*/
+    z-index: 100;
 }
 
 /* ul 스타일 지정 */

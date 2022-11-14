@@ -57,9 +57,17 @@
    	<!-- 파라미터가 MAP인 경우, KEY값만 작성하면  값을 얻어온다...~~~~~ -->
   
   
-  	<update id = "memberDelete">
-  		UPDATE "MEMBER" SET
-  		MEMBER_DEL_FL = 'Y'
-  		WHERE MEMBER_NO = #{memberNo}
-  	</update>
+	  	<update id = "memberDelete">
+	  		UPDATE "MEMBER" SET
+	  		MEMBER_DEL_FL = 'Y'
+	  		WHERE MEMBER_NO = #{memberNo}
+	  	</update>
+  	
+	  	<!-- 프로필 이미지 수정 -->
+	  	<!-- mybatis config 보면 ....별칭이 적혀있단다.......근데 parameterType속성 적는건 선택이니까 걍 안적음. -->
+	  	<update id="updateProfile">
+	  		UPDATE "MEMBER" SET
+	  		PROFILE_IMG = #{profileImage}
+	  		WHERE MEMBER_NO = #{memberNo}
+	  	</update>
 </mapper>

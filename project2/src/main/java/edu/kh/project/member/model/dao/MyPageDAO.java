@@ -56,4 +56,16 @@ public class MyPageDAO {
 		
 		return sqlSession.update("myPageMapper.memberDelete",memberNo);
 	}
+
+	/** 프로필 이미지를 수정하겠다!!
+	 * @param loginMember
+	 * @return
+	 */
+	public int updateProfile(Member loginMember) {
+		
+		
+		//마이바티스를 이용해서 update를 진행할겨
+		return sqlSession.update("myPageMapper.updateProfile", loginMember);
+		
+	}
 }

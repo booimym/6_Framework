@@ -69,12 +69,12 @@
 
                     <div class = "myPage-row info-address">
                         <input type="text" name = "memberAddress" value ="${addr[1]}" placeholder="도로명/지번주소">
-                       
+                    
                     </div>
 
                     <div class = "myPage-row info-address">
                         <input type="text" name = "memberAddress" value ="2층" placeholder="상세주소">
-                       
+                    
                     </div>
 
                     <button class = "myPage-submit">수정하기</button>
