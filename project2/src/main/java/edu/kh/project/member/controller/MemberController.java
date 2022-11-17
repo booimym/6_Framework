@@ -362,6 +362,9 @@ public class MemberController {
 			String path = null; //리다이렉트 경로 지정
 			String message = null; //전달할 메시지 저장 변수
 			
+			result = 0;
+			
+			
 			if(result>0) { //성공 시
 				path="/";
 				message="회원가입 성공!!!!!!!!";

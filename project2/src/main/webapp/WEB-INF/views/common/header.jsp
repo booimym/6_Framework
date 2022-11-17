@@ -62,18 +62,10 @@
                 <li><a href = "#">FAQ</a></li>
                 <li><a href = "#">1:1문의</a></li> --%>
 
-                <c:forEach var = "boardType" items = "${boardTypeMap}">
-                
-                <%-- 
-                    EL을 이용해서 Map 데이터를 다루는 방법
-                
-                    key ==> ${변수명.key}
-                    value ==> ${변수명.value}
-                
-                --%>
-
-                <li><a href="/board/${boardType.key}/list">${boardType.value}</a></li>
-                
+                <c:forEach var = "boardType" items = "${boardTypeList}"> <!-- boardTypeList에서 하나씩 boardType(map : 컬럼명, 값)을 꺼내오나벼 -->
+                    <li>
+                        <a href="/board/${boardType.BOARD_CODE}">${boardType.BOARD_NAME}</a>
+                    </li>
                 </c:forEach>
 
 
