@@ -55,6 +55,11 @@ public class BoardDAO {
 		
 		
 	}
+
+	public Board selectBoardDetail(int boardNo) {
+		
+		return sqlsession.selectOne("boardMapper.selectBoardDetail",boardNo);
+	}
 	
 	
 }
