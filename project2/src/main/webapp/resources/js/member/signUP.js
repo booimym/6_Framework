@@ -289,7 +289,7 @@ memberNickname.addEventListener("input",function(){
 
         nickMessage.innerText = "한글, 영어, 숫자로만 2~10글자";
         nickMessage.classList.remove("confirm","error");
-        checkObj.memgerNickname = false;
+        checkObj.memberNickname = false;
         return;
 
     }
