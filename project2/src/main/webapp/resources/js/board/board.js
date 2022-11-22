@@ -93,3 +93,25 @@ boardLike.addEventListener("click", e => {
 
 
 });
+
+//게시글 삭제
+const deleteBtn = document.getElementById("deleteBtn");
+
+deleteBtn.addEventListener("click", () => {
+
+    
+    if(confirm("정말 삭제하시겠습니까?")){
+
+        //삭제 요청을 보내야 해 (어떤 주소로 보낼까?)
+        //이 페이지의 요청 주소는 /board/{boardCode}/{boardNo}임. 여기다가 /delete해서 GET으로 보내면 되겠당.
+
+        // 이렇게 주소를 하면, 삭제하면 어느 주소로 돌아올까까지도 같이 만들 수 있음(/board/{boardCode}) 때문에...
+
+        location.href = location.pathname + "/delete";
+        // location.href : "주소" : 작성된 주소 요청(a태그랑 똑같다고 생각하면 됨)
+
+        //lobation.pathname = /board/1/1991
+
+    }
+})
+

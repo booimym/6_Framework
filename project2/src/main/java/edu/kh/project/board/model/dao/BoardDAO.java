@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import edu.kh.project.board.model.vo.Board;
+import edu.kh.project.board.model.vo.BoardImage;
 import edu.kh.project.board.model.vo.Pagination;
 
 @Repository
@@ -91,6 +92,38 @@ public class BoardDAO {
 	public int boardLikeDown(Map<String, Object> paramMap) {
 		
 		return sqlsession.delete("boardMapper.boardLikeDown", paramMap);
+	}
+
+	/**게시글 삭제
+	 * @param boardNo
+	 * @return
+	 */
+	public int boardDelete(int boardNo) {
+		
+		return sqlsession.update("boardMapper.boardDelete",boardNo);
+	}
+
+	public int boardWrite(Board board) {
+		
+		int result = sqlsession.insert("boardMapper.boardWrite",board);
+		
+		//board의 boardNo 필드
+		//	-> <selectKey>로 인해서 생성된 시퀀스 값이 세팅되어 있음.
+		
+		//메인 쿼리(INSERT) 성공 시
+		if(result > 0) result = board.getBoardNo();
+		
+		
+		return result; // 0 또는 삽입된 게시글 번호
+	}
+
+	/**게시글 첨부 이미지 삽입(리스트 형식)
+	 * @param boardImageList
+	 * @return result(INSERT된 행의 개수)
+	 */
+	public int insertBoardImageList(List<BoardImage> boardImageList) {
+		
+		return sqlsession.insert("boardMapper.insertBoardImageList",boardImageList);
 	}
 	
 	
