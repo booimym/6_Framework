@@ -28,4 +28,6 @@ public interface BoardService {
 
 	int boardWrite(Board board, List<MultipartFile> imageList, String webPath, String folderPath) throws IOException;
 
+	int boardUpdate(Board board, List<MultipartFile> imageList, String webPath, String folderPath, String deleteList) throws Exception;
+
 }

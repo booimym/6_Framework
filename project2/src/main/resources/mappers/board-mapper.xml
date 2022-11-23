@@ -242,5 +242,43 @@
 		FROM DUAL
 		</foreach>
 	</insert>
- 
+
+ <update id="boardUpdate">
+   UPDATE BOARD SET
+	BOARD_TITLE = #{boardTitle},
+	BOARD_CONTENT = #{boardContent}
+	WHERE BOARD_NO = #{boardNo}
+   </update>
+   
+   <!-- 
+	   - #{key} ==’value’ (양쪽에 홑따옴표가 추가됨)
+	    
+	   	 → PreparedStatement (삽입, 조건절에서 값으로 쓰는 경우)
+	    
+		- ${key} == value  (따옴표가 없당….!)
+	    
+	    	→ Statement방식 (SQL의 일부가 되는 경우….)
+    -->
+   <delete id="boardImageDelete">
+   DELETE FROM BOARD_IMG
+   ${condition}
+   </delete>
+   
+   <!-- 이미지 수정 -->
+   <update id="boardImageUpdate">
+   UPDATE BOARD_IMG SET
+   IMG_RENAME = #{imageReName},
+   IMG_ORIGINAL = #{imageOriginal}
+   WHERE BOARD_NO = #{boardNo}
+   AND IMG_ORDER = #{imageOrder}
+   </update>
+   
+   
+   <!-- 이미지 삽입 -->
+   <insert id="boardImageinsert">
+   INSERT INTO BOARD_IMG
+   VALUES(SEQ_IMG_NO.NEXTVAL,#{imagePath},#{imageReName},#{imageOriginal},#{imageOrder},#{boardNo})
+   </insert>
+   
+   
 </mapper>

@@ -115,3 +115,14 @@ deleteBtn.addEventListener("click", () => {
     }
 })
 
+//수정 버튼
+const updateBtn = document.getElementById("updateBtn");
+
+updateBtn.addEventListener("click",() => {
+
+    // /board/{boardCode}/{boardNo}/update?cp=10
+    // 상세 조회 : /board/{boardCode}/{boardNo}?cp=10
+    location.href = location.pathname + "/update" + location.search;
+
+});
+

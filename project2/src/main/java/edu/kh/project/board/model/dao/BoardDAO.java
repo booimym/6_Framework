@@ -17,14 +17,14 @@ import edu.kh.project.board.model.vo.Pagination;
 public class BoardDAO {
 	
 	@Autowired
-	private SqlSessionTemplate sqlsession;
+	private SqlSessionTemplate sqlSession;
 
 	/** 게시판 이름 목록 조회
 	 * @return boardTypeList
 	 */
 	public List<Map<String,Object>> selectBoardType() {
 		
-		return sqlsession.selectList("boardMapper.selectBoardType");
+		return sqlSession.selectList("boardMapper.selectBoardType");
 	}
 
 	/** 게시글 수 조회
@@ -33,7 +33,7 @@ public class BoardDAO {
 	 */
 	public int getListCount(int boardCode) {
 		
-		return sqlsession.selectOne("boardMapper.getListCount",boardCode);
+		return sqlSession.selectOne("boardMapper.getListCount",boardCode);
 	}
 
 	/** 특정 게시판 목록 조회
@@ -51,7 +51,7 @@ public class BoardDAO {
 		
 		RowBounds rowBounds = new RowBounds(offset, pagination.getLimit());
 		
-		return sqlsession.selectList("boardMapper.selectBoardList",boardCode, rowBounds);
+		return sqlSession.selectList("boardMapper.selectBoardList",boardCode, rowBounds);
 																// 파라미터가 없을 경우, null 대입
 		
 		
@@ -59,12 +59,12 @@ public class BoardDAO {
 
 	public Board selectBoardDetail(int boardNo) {
 		
-		return sqlsession.selectOne("boardMapper.selectBoardDetail",boardNo);
+		return sqlSession.selectOne("boardMapper.selectBoardDetail",boardNo);
 	}
 
 	public int updateReadCount(int boardNo) {
 		
-		return sqlsession.update("boardMapper.updateReadCount", boardNo);
+		return sqlSession.update("boardMapper.updateReadCount", boardNo);
 	}
 
 	/** 좋아요 여부 체크
@@ -73,7 +73,7 @@ public class BoardDAO {
 	 */
 	public int boardLikeCheck(Map<String, Object> map) {
 		
-		return sqlsession.selectOne("boardMapper.boardLikeCheck", map);
+		return sqlSession.selectOne("boardMapper.boardLikeCheck", map);
 	}
 
 	/**
@@ -82,7 +82,7 @@ public class BoardDAO {
 	 */
 	public int boardLikeUp(Map<String, Object> paramMap) {
 		
-		return sqlsession.insert("boardMapper.boardLikeUp",paramMap);
+		return sqlSession.insert("boardMapper.boardLikeUp",paramMap);
 	}
 
 	/**
@@ -91,7 +91,7 @@ public class BoardDAO {
 	 */
 	public int boardLikeDown(Map<String, Object> paramMap) {
 		
-		return sqlsession.delete("boardMapper.boardLikeDown", paramMap);
+		return sqlSession.delete("boardMapper.boardLikeDown", paramMap);
 	}
 
 	/**게시글 삭제
@@ -100,12 +100,12 @@ public class BoardDAO {
 	 */
 	public int boardDelete(int boardNo) {
 		
-		return sqlsession.update("boardMapper.boardDelete",boardNo);
+		return sqlSession.update("boardMapper.boardDelete",boardNo);
 	}
 
 	public int boardWrite(Board board) {
 		
-		int result = sqlsession.insert("boardMapper.boardWrite",board);
+		int result = sqlSession.insert("boardMapper.boardWrite",board);
 		
 		//board의 boardNo 필드
 		//	-> <selectKey>로 인해서 생성된 시퀀스 값이 세팅되어 있음.
@@ -123,7 +123,35 @@ public class BoardDAO {
 	 */
 	public int insertBoardImageList(List<BoardImage> boardImageList) {
 		
-		return sqlsession.insert("boardMapper.insertBoardImageList",boardImageList);
+		return sqlSession.insert("boardMapper.insertBoardImageList",boardImageList);
+	}
+
+	public int boardUpdate(Board board) {
+		
+		return sqlSession.update("boardMapper.boardUpdate",board);
+	}
+
+	public int boardImageDelete(String condition) {
+		
+		return sqlSession.delete("boardMapper.boardImageDelete",condition);
+	}
+
+	/** 이미지 수정
+	 * @param img
+	 * @return
+	 */
+	public int boardImageUpdate(BoardImage img) {
+		
+		return sqlSession.update("boardMapper.boardImageUpdate",img);
+	}
+
+	/** 이미지 삽입
+	 * @param img
+	 * @return
+	 */
+	public int boardImageInsert(BoardImage img) {
+		
+		return  sqlSession.insert("boardMapper.boardImageinsert",img);
 	}
 	
 	
