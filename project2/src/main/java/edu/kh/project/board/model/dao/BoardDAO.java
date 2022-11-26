@@ -153,6 +153,31 @@ public class BoardDAO {
 		
 		return  sqlSession.insert("boardMapper.boardImageinsert",img);
 	}
+
+	/** 검색 조건이 일치하는 게시글 수를 조회!
+	 * @param pm
+	 * @return
+	 */
+	public int getListCount(Map<String, Object> pm) {
+		
+		return sqlSession.selectOne("boardMapper.getListCount_search",pm);
+	}
+	
+	/** 검색조건이 일치하는 게시글 목록 조회
+	 * @param pagination
+	 * @param pm
+	 * @return boardList
+	 */
+	public List<Board> selectBoardType(Pagination pagination, Map<String, Object> pm) {
+		
+		int offset = (pagination.getCurrentPage()-1) * pagination.getLimit();
+		
+		RowBounds rowBounds = new RowBounds(offset, pagination.getLimit());
+		
+		return sqlSession.selectList("boardMapper.selectBoardList_search",pm,rowBounds);
+	}
+
+	
 	
 	
 }

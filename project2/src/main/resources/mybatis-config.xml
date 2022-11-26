@@ -23,6 +23,7 @@
 		<typeAlias type="edu.kh.project.board.model.vo.Board" alias="Board"/>
 		<typeAlias type="edu.kh.project.board.model.vo.BoardImage" alias="BoardImage"/>
 		<typeAlias type="edu.kh.project.board.model.vo.Comment" alias="Comment"/>
+		
 	</typeAliases>
 	
 	
@@ -32,6 +33,7 @@
 		<mapper resource="/mappers/myPage-mapper.xml"/>
 		<mapper resource="/mappers/ajax-mapper.xml"/>
 		<mapper resource="/mappers/board-mapper.xml"/>
+		<mapper resource="/mappers/comment-mapper.xml"/>
 		
 	</mappers>
 

@@ -53,18 +53,26 @@ public class BoardController {
 	@GetMapping("/board/{boardCode}")
 	public String selectBoardList(@PathVariable("boardCode") int boardCode, 
 			Model model,
-			@RequestParam(value = "cp", required = false, defaultValue = "1") int cp
-			
+			@RequestParam(value = "cp", required = false, defaultValue = "1") int cp,
+			@RequestParam Map<String,Object> pm
 			
 			) {
 		
 		// Model : 값 전달용 객체
 		// model.addAttribute("k",v) : request scope에 세팅 -> forward 시 유지됨..
-		
-		Map<String,Object> map = service.selectBoardList(boardCode, cp);
-		
-		model.addAttribute("map",map); //request scope 세팅임.
-		
+		if(pm.get("key")== null) { //검색이 아닌 경우
+			
+			Map<String,Object> map = service.selectBoardList(boardCode, cp);
+			                                               //몇번게시판인가 찾으면 됨
+			model.addAttribute("map",map); //request scope 세팅임.
+			
+		} else { //검색인 경우
+			pm.put("boardCode", boardCode); //게시판 번호를 pm에 추가한다.
+			//그러면 boardCode, key, query, cp가 pm안에 담겨있는 셈이다.
+			
+			Map<String,Object> map = service.selectBoardList(pm, cp);
+			model.addAttribute("map",map);
+		}
 		return "board/boardList"; //접두사,접미사 지우고 나머지 주소로 forward한당
 		
 	}

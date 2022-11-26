@@ -65,3 +65,36 @@
     }
 
 })();
+
+// 검색을 한 경우 검색창에 검색(key, query) 남겨놓기
+(()=>{
+
+    const select = document.getElementById("search-key");
+    const input = document.getElementById("search-query");
+    const option = document.querySelectorAll("#search-key > option");
+
+    if(select != null){//검색창이 존재할 때
+    
+        const params = new URL(location.href).searchParams;
+        // 주소에서 쿼리스트링만 분리한 객체
+
+        const key = params.get("key");
+        const query = params.get("query");
+
+        // input에 이전 검색어를 값으로 추가한다
+        input.value = query;
+
+        // select에서 이전 검색한 key의 값과 일치하는 option태그에
+        // selected속성을 추가하는 걸 작성해보겠당!
+        for(let op of option){
+
+            // option의 value와 key가 일치할 때
+            if(op.value == key){
+                //op.setAttribute("selected",true)
+                op.selected = true;
+            }
+        }
+    
+    }
+
+})();
