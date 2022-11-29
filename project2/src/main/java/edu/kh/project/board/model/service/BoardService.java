@@ -32,4 +32,6 @@ public interface BoardService {
 
 	Map<String, Object> selectBoardList(Map<String, Object> pm, int cp);
 
+	List<String> selectImageList();
+
 }
