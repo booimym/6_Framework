@@ -40,7 +40,16 @@
                     <c:if test = "${not empty board.profileImage}">
                     <img src="${board.profileImage}">
                     </c:if>
-                    <span>${board.memberNickname}</span>
+                    <%-- <span>${board.memberNickname}</span>  (채팅방 전) 기존 꺼--%>
+                    <!-- 채팅방 입장 -->
+                    <c:choose>
+                       <c:when test="${empty loginMember or loginMember.memberNo == board.memberNo}"><%--로그인 안 된 회원은 채팅 못검 or 내가 나에게 채팅을 못 걸게 하는 거임--%>
+                          <span>${board.memberNickname}</span>
+                       </c:when>
+                       <c:otherwise>
+                          <span><a href="/chatting/enter?targetNo=${board.memberNo}">${board.memberNickname}</a></span><%--채팅방에 입장할 수 있게끔 a태그로 감쌈--%>
+                       </c:otherwise>
+                    </c:choose>
 
                      <%-- 좋아요 --%>
                     <span class="like-area">
